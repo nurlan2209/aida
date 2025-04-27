@@ -66,12 +66,6 @@ const AdminPanel = () => {
           >
             Пользователи
           </button>
-          <button 
-            className={`tab-button ${activeTab === 'subscriptions' ? 'active' : ''}`}
-            onClick={() => setActiveTab('subscriptions')}
-          >
-            Абонементы
-          </button>
         </div>
         
         <div className="admin-content">
@@ -165,12 +159,6 @@ const AdminPanel = () => {
               {activeTab === 'users' && (
                 <div className="users-tab">
                   <p className="tab-placeholder">Управление пользователями будет доступно в следующей версии.</p>
-                </div>
-              )}
-              
-              {activeTab === 'subscriptions' && (
-                <div className="subscriptions-tab">
-                  <p className="tab-placeholder">Управление абонементами будет доступно в следующей версии.</p>
                 </div>
               )}
             </>

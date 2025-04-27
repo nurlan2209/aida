@@ -1,7 +1,7 @@
 // src/pages/ProfilePage.jsx
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { getUserBookings, cancelBooking, getUserSubscriptions } from '../services/api';
+import { getUserBookings, cancelBooking } from '../services/api';
 import { useAuth } from '../services/AuthContext';
 import BookingsList from '../components/BookingsList';
 import '../styles/ProfilePage.css';
@@ -53,10 +53,6 @@ const ProfilePage = () => {
         const bookingsData = await getUserBookings();
         console.log('Полученные данные о бронированиях:', bookingsData);
         setBookings(bookingsData);
-        
-        // Загрузка абонементов пользователя
-        const subscriptionsData = await getUserSubscriptions();
-        setSubscriptions(subscriptionsData);
         
         setLoading(false);
       } catch (err) {
@@ -138,12 +134,6 @@ const ProfilePage = () => {
               >
                 Мои бронирования
               </button>
-              <button 
-                className={`tab-button ${activeTab === 'subscriptions' ? 'active' : ''}`}
-                onClick={() => setActiveTab('subscriptions')}
-              >
-                Мои абонементы
-              </button>
             </div>
             
             <div className="tab-content">
@@ -160,44 +150,6 @@ const ProfilePage = () => {
                         />
                     </div>
                     )}
-                  
-                  {activeTab === 'subscriptions' && (
-                    <div className="subscriptions-tab">
-                      {subscriptions.length === 0 ? (
-                        <p className="no-subscriptions">У вас пока нет активных абонементов</p>
-                      ) : (
-                        <div className="user-subscriptions">
-                          {subscriptions.map((subscription) => (
-                            <div key={subscription.id} className="subscription-item card">
-                              <h3 className="subscription-name">{subscription.subscription_name}</h3>
-                              <div className="subscription-dates">
-                                <p>
-                                  <span className="subscription-info-label">Начало:</span> 
-                                  {new Date(subscription.start_date).toLocaleDateString('ru-RU')}
-                                </p>
-                                <p>
-                                  <span className="subscription-info-label">Окончание:</span> 
-                                  {new Date(subscription.end_date).toLocaleDateString('ru-RU')}
-                                </p>
-                              </div>
-                              {subscription.visits_left !== null && (
-                                <p className="subscription-visits">
-                                  <span className="subscription-info-label">Осталось посещений:</span> 
-                                  {subscription.visits_left}
-                                </p>
-                              )}
-                              <div className="subscription-status">
-                                Статус: 
-                                <span className={`status-badge ${subscription.is_active ? 'active' : 'inactive'}`}>
-                                  {subscription.is_active ? 'Активен' : 'Неактивен'}
-                                </span>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  )}
                 </>
               )}
             </div>

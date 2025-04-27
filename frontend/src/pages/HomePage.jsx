@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getHalls, getSubscriptions } from '../services/api';
+import { getHalls } from '../services/api';
 import HallCard from '../components/HallCard';
 import '../styles/HomePage.css';
 
@@ -18,10 +18,7 @@ const HomePage = () => {
         const hallsData = await getHalls();
         setFeaturedHalls(hallsData.slice(0, 3));
         
-        // Получаем абонементы
-        const subscriptionsData = await getSubscriptions();
-        setSubscriptions(subscriptionsData);
-        
+
         setLoading(false);
       } catch (error) {
         console.error('Ошибка при загрузке данных:', error);
@@ -116,41 +113,6 @@ const HomePage = () => {
                 </Link>
               </div>
             </>
-          )}
-        </div>
-      </section>
-
-      <section className="subscriptions-section section">
-        <div className="container">
-          <h2 className="section-title">Абонементы</h2>
-          
-          {loading ? (
-            <div className="loading">Загрузка...</div>
-          ) : (
-            <div className="subscriptions-grid">
-              {subscriptions.map((subscription) => (
-                <div key={subscription.id} className="subscription-card card">
-                  <h3 className="subscription-title">{subscription.name}</h3>
-                  <p className="subscription-price">{subscription.price} ₽</p>
-                  <p className="subscription-description">{subscription.description}</p>
-                  <div className="subscription-details">
-                    <p>
-                      <span className="subscription-detail-label">Срок действия:</span> 
-                      {subscription.days_valid} дней
-                    </p>
-                    {subscription.visits_count && (
-                      <p>
-                        <span className="subscription-detail-label">Количество посещений:</span> 
-                        {subscription.visits_count}
-                      </p>
-                    )}
-                  </div>
-                  <Link to="/login" className="button subscription-button">
-                    Приобрести
-                  </Link>
-                </div>
-              ))}
-            </div>
           )}
         </div>
       </section>

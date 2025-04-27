@@ -183,21 +183,3 @@ export const createPayment = async (paymentData) => {
     throw error.response?.data || { detail: 'Ошибка при создании платежа' };
   }
 };
-
-export const getSubscriptions = async () => {
-  try {
-    const response = await api.get('/payments/subscriptions/');
-    return response.data;
-  } catch (error) {
-    throw error.response?.data || { detail: 'Ошибка при получении списка абонементов' };
-  }
-};
-
-export const getUserSubscriptions = async () => {
-  try {
-    const response = await api.get('/payments/user-subscriptions/');
-    return response.data;
-  } catch (error) {
-    throw error.response?.data || { detail: 'Ошибка при получении абонементов пользователя' };
-  }
-};
