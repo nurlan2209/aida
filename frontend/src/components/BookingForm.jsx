@@ -67,29 +67,48 @@ const BookingForm = ({ hallId }) => {
     e.preventDefault();
     
     try {
-      setSubmitting(true);
-      setSubmitError(null);
-      
-      // Преобразование даты к формату YYYY-MM-DD
-      const formattedDate = formData.date.toISOString().split('T')[0];
-      
-      const bookingData = {
-        sport_hall: hallId,
-        service: formData.serviceId || null,
-        date: formattedDate,
-        start_time: formData.startTime,
-        end_time: formData.endTime,
-      };
-      
-      await createBooking(bookingData);
-      
-      // Перенаправление на страницу профиля после успешного бронирования
-      navigate('/profile', { state: { bookingSuccess: true } });
-      
-    } catch (err) {
-      setSubmitError('Ошибка при создании бронирования. Пожалуйста, попробуйте снова.');
-      setSubmitting(false);
-    }
+        setSubmitting(true);
+        setSubmitError(null);
+        
+        // Преобразование даты к формату YYYY-MM-DD
+        const formattedDate = formData.date.toISOString().split('T')[0];
+        
+        const bookingData = {
+            sport_hall: Number(hallId),
+            service: formData.serviceId ? Number(formData.serviceId) : null,
+            date: formattedDate,
+            start_time: formData.startTime,
+            end_time: formData.endTime,
+          };
+          
+          console.log('Отправляемые данные бронирования:', bookingData);
+        
+        await createBooking(bookingData);
+        
+        // Перенаправление на страницу профиля после успешного бронирования
+        navigate('/profile', { state: { bookingSuccess: true } });
+        
+      } catch (err) {
+        console.error('Ошибка бронирования:', err);
+        console.error('Детали ошибки:', err.response?.data);
+        
+        let errorMessage = 'Ошибка при создании бронирования. ';
+        if (err.response?.data) {
+          // Если сервер вернул JSON с деталями ошибки
+          if (typeof err.response.data === 'object') {
+            // Преобразуем объект ошибок в строку
+            errorMessage += Object.entries(err.response.data)
+              .map(([field, errors]) => `${field}: ${errors}`)
+              .join('; ');
+          } else {
+            // Если вернулась строка
+            errorMessage += err.response.data;
+          }
+        }
+        
+        setSubmitError(errorMessage);
+        setSubmitting(false);
+      }
   };
 
   if (loading) {

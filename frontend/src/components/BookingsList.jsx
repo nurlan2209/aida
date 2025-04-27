@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import '../styles/BookingsList.css';
+import PaymentModal from './PaymentModal';
 
-const BookingsList = ({ bookings, onCancelBooking }) => {
+const BookingsList = ({ bookings, onCancelBooking, onPaymentComplete }) => {
   const [expandedBooking, setExpandedBooking] = useState(null);
+  const [paymentBooking, setPaymentBooking] = useState(null);
 
   const toggleBookingDetails = (bookingId) => {
     if (expandedBooking === bookingId) {
@@ -12,6 +14,18 @@ const BookingsList = ({ bookings, onCancelBooking }) => {
     }
   };
 
+  const handlePaymentClick = (booking) => {
+    setPaymentBooking(booking);
+  };
+
+  const handlePaymentModalClose = (paymentSuccess) => {
+    if (paymentSuccess && onPaymentComplete) {
+      // Вызываем колбэк для обновления статуса бронирования
+      onPaymentComplete(paymentBooking.id);
+    }
+    setPaymentBooking(null);
+  };
+  
   const getStatusClass = (status) => {
     switch (status) {
       case 'confirmed':
@@ -84,6 +98,11 @@ const BookingsList = ({ bookings, onCancelBooking }) => {
           {expandedBooking === booking.id && (
             <div className="booking-details">
               <div className="booking-details-row">
+                <span className="booking-detail-label">Зал:</span>
+                <span className="booking-detail-value">{booking.sport_hall.name}</span>
+              </div>
+
+              <div className="booking-details-row">
                 <span className="booking-detail-label">Адрес:</span>
                 <span className="booking-detail-value">{booking.sport_hall.address}</span>
               </div>
@@ -113,18 +132,25 @@ const BookingsList = ({ bookings, onCancelBooking }) => {
                 )}
                 
                 {booking.status === 'pending' && (
-                  <a 
-                    href={`/payment/${booking.id}`}
+                  <button 
                     className="button payment-button"
+                    onClick={() => handlePaymentClick(booking)}
                   >
                     Оплатить
-                  </a>
+                  </button>
                 )}
               </div>
             </div>
           )}
         </div>
       ))}
+
+        {paymentBooking && (
+        <PaymentModal 
+          booking={paymentBooking} 
+          onClose={handlePaymentModalClose} 
+        />
+      )}
     </div>
   );
 };

@@ -6,6 +6,28 @@ import { useAuth } from '../services/AuthContext';
 import BookingsList from '../components/BookingsList';
 import '../styles/ProfilePage.css';
 
+const handlePaymentComplete = async (bookingId) => {
+    try {
+      // Здесь можно добавить API-запрос для обновления статуса бронирования
+      // Для имитации, просто обновляем локальное состояние
+      setBookings(bookings.map(booking => 
+        booking.id === bookingId 
+          ? { ...booking, status: 'confirmed' } 
+          : booking
+      ));
+      
+      setSuccessMessage('Оплата прошла успешно!');
+      
+      // Скрываем сообщение об успешной оплате через 5 секунд
+      setTimeout(() => {
+        setSuccessMessage(null);
+      }, 5000);
+      
+    } catch (err) {
+      setError('Ошибка при обновлении статуса оплаты');
+    }
+  };
+
 const ProfilePage = () => {
   const { user } = useAuth();
   const location = useLocation();
@@ -124,14 +146,15 @@ const ProfilePage = () => {
                 <div className="loading">Загрузка...</div>
               ) : (
                 <>
-                  {activeTab === 'bookings' && (
+                    {activeTab === 'bookings' && (
                     <div className="bookings-tab">
-                      <BookingsList 
+                        <BookingsList 
                         bookings={bookings} 
-                        onCancelBooking={handleCancelBooking} 
-                      />
+                        onCancelBooking={handleCancelBooking}
+                        onPaymentComplete={handlePaymentComplete} 
+                        />
                     </div>
-                  )}
+                    )}
                   
                   {activeTab === 'subscriptions' && (
                     <div className="subscriptions-tab">
