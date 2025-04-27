@@ -6,7 +6,7 @@ router = DefaultRouter()
 router.register(r'halls', SportHallViewSet)
 router.register(r'services', ServiceViewSet)
 router.register(r'schedules', ScheduleViewSet)
-router.register(r'', BookingViewSet)
+router.register(r'bookings', BookingViewSet, basename='booking')  # Изменено с '' на 'bookings'
 
 urlpatterns = [
     path('', include(router.urls)),

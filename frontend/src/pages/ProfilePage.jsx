@@ -6,40 +6,39 @@ import { useAuth } from '../services/AuthContext';
 import BookingsList from '../components/BookingsList';
 import '../styles/ProfilePage.css';
 
-const handlePaymentComplete = async (bookingId) => {
-    try {
-      // Здесь можно добавить API-запрос для обновления статуса бронирования
-      // Для имитации, просто обновляем локальное состояние
-      setBookings(bookings.map(booking => 
-        booking.id === bookingId 
-          ? { ...booking, status: 'confirmed' } 
-          : booking
-      ));
-      
-      setSuccessMessage('Оплата прошла успешно!');
-      
-      // Скрываем сообщение об успешной оплате через 5 секунд
-      setTimeout(() => {
-        setSuccessMessage(null);
-      }, 5000);
-      
-    } catch (err) {
-      setError('Ошибка при обновлении статуса оплаты');
-    }
-  };
+  const ProfilePage = () => {
+    const { user } = useAuth();
+    const location = useLocation();
+    
+    const [bookings, setBookings] = useState([]);
+    const [subscriptions, setSubscriptions] = useState([]);
+    const [activeTab, setActiveTab] = useState('bookings');
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [successMessage, setSuccessMessage] = useState(location.state?.bookingSuccess 
+      ? 'Бронирование успешно создано!' 
+      : null);
 
-const ProfilePage = () => {
-  const { user } = useAuth();
-  const location = useLocation();
-  
-  const [bookings, setBookings] = useState([]);
-  const [subscriptions, setSubscriptions] = useState([]);
-  const [activeTab, setActiveTab] = useState('bookings');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(location.state?.bookingSuccess 
-    ? 'Бронирование успешно создано!' 
-    : null);
+      const handlePaymentComplete = async (bookingId) => {
+        try {
+          // Для имитации, просто обновляем локальное состояние
+          setBookings(bookings.map(booking => 
+            booking.id === bookingId 
+              ? { ...booking, status: 'confirmed' } 
+              : booking
+          ));
+          
+          setSuccessMessage('Оплата прошла успешно!');
+          
+          // Скрываем сообщение об успешной оплате через 5 секунд
+          setTimeout(() => {
+            setSuccessMessage(null);
+          }, 5000);
+          
+        } catch (err) {
+          setError('Ошибка при обновлении статуса оплаты');
+        }
+      };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -49,6 +48,7 @@ const ProfilePage = () => {
         
         // Загрузка бронирований пользователя
         const bookingsData = await getUserBookings();
+        console.log('Полученные данные о бронированиях:', bookingsData);
         setBookings(bookingsData);
         
         // Загрузка абонементов пользователя
@@ -57,11 +57,12 @@ const ProfilePage = () => {
         
         setLoading(false);
       } catch (err) {
+        console.error('Ошибка при загрузке данных:', err);
         setError('Ошибка при загрузке данных');
         setLoading(false);
       }
     };
-
+  
     fetchUserData();
   }, []);
 

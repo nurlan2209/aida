@@ -91,27 +91,48 @@ export const getScheduleByHall = async (hallId) => {
 // Бронирования
 export const getUserBookings = async () => {
   try {
-    const response = await api.get('/bookings/');
-    return response.data;
+    const response = await api.get('/bookings/bookings/');
+    // Проверяем формат ответа
+    console.log('API ответ:', response.data);
+    
+    // Если ответ - это объект с полем 'results', возвращаем results
+    if (response.data && Array.isArray(response.data.results)) {
+      return response.data.results;
+    }
+    
+    // Если ответ сам является массивом, возвращаем его
+    if (Array.isArray(response.data)) {
+      return response.data;
+    }
+    
+    // В крайнем случае возвращаем пустой массив
+    return [];
   } catch (error) {
+    console.error('Ошибка при получении бронирований:', error);
     throw error.response?.data || { detail: 'Ошибка при получении бронирований' };
   }
 };
 
 export const createBooking = async (bookingData) => {
   try {
-    const response = await api.post('/bookings/', bookingData);
+    const response = await api.post('/bookings/bookings/', bookingData);
     return response.data;
   } catch (error) {
+    console.error('Полная ошибка при создании бронирования:', error);
+    if (error.response) {
+      console.error('Статус ответа:', error.response.status);
+      console.error('Данные ответа:', error.response.data);
+    }
     throw error.response?.data || { detail: 'Ошибка при создании бронирования' };
   }
 };
 
 export const cancelBooking = async (id) => {
   try {
-    const response = await api.post(`/bookings/${id}/cancel/`);
+    const response = await api.post(`/bookings/bookings/${id}/cancel/`);
     return response.data;
   } catch (error) {
+    console.error('Ошибка при отмене бронирования:', error);
     throw error.response?.data || { detail: 'Ошибка при отмене бронирования' };
   }
 };

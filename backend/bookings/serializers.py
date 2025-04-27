@@ -19,8 +19,9 @@ class ScheduleSerializer(serializers.ModelSerializer):
         fields = ('id', 'sport_hall', 'day_of_week', 'day_of_week_display', 'start_time', 'end_time')
 
 class BookingSerializer(serializers.ModelSerializer):
-    sport_hall = SportHallSerializer(read_only=True)
-    service = ServiceSerializer(read_only=True)
+    sport_hall_details = SportHallSerializer(source='sport_hall', read_only=True)
+    service_details = ServiceSerializer(source='service', read_only=True)
+    
     class Meta:
         model = Booking
         fields = '__all__'

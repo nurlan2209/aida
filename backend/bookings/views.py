@@ -44,7 +44,20 @@ class BookingViewSet(viewsets.ModelViewSet):
         return Booking.objects.filter(user=self.request.user)
     
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        try:
+            print("Данные запроса:", self.request.data)
+            print("Пользователь:", self.request.user)
+            # Убедитесь, что sport_hall передается корректно
+            sport_hall_id = self.request.data.get('sport_hall')
+            if not sport_hall_id:
+                raise serializers.ValidationError({"sport_hall": "This field is required."})
+                
+            serializer.save(user=self.request.user)
+        except Exception as e:
+            import traceback
+            print("Ошибка при создании бронирования:", str(e))
+            print(traceback.format_exc())
+            raise
     
     @action(detail=True, methods=['post'])
     def cancel(self, request, pk=None):

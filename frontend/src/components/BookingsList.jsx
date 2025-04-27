@@ -2,7 +2,10 @@ import { useState } from 'react';
 import '../styles/BookingsList.css';
 import PaymentModal from './PaymentModal';
 
-const BookingsList = ({ bookings, onCancelBooking, onPaymentComplete }) => {
+const BookingsList = ({ bookings = [], onCancelBooking, onPaymentComplete }) => {
+  // Убедитесь, что bookings всегда массив
+  const bookingsArray = Array.isArray(bookings) ? bookings : [];
+  
   const [expandedBooking, setExpandedBooking] = useState(null);
   const [paymentBooking, setPaymentBooking] = useState(null);
 
@@ -62,11 +65,11 @@ const BookingsList = ({ bookings, onCancelBooking, onPaymentComplete }) => {
   };
 
   // Сортировка бронирований по дате (от новых к старым)
-  const sortedBookings = [...bookings].sort((a, b) => {
+  const sortedBookings = [...bookingsArray].sort((a, b) => {
     return new Date(b.date) - new Date(a.date);
   });
 
-  if (bookings.length === 0) {
+  if (bookingsArray.length === 0) {
     return <p className="no-bookings">У вас пока нет бронирований</p>;
   }
 

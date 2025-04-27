@@ -74,12 +74,13 @@ const BookingForm = ({ hallId }) => {
         const formattedDate = formData.date.toISOString().split('T')[0];
         
         const bookingData = {
-            sport_hall: Number(hallId),
-            service: formData.serviceId ? Number(formData.serviceId) : null,
-            date: formattedDate,
-            start_time: formData.startTime,
-            end_time: formData.endTime,
-          };
+          sport_hall: Number(hallId),
+          service: formData.serviceId ? Number(formData.serviceId) : null,
+          date: formattedDate,
+          start_time: formData.startTime,
+          end_time: formData.endTime,
+          user: user.id  // Добавить ID пользователя
+      };
           
           console.log('Отправляемые данные бронирования:', bookingData);
         
