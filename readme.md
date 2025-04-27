@@ -16,9 +16,9 @@ cd backend
 
 Создайте виртуальное окружение Python и активируйте его:
 python -m venv venv
-# На Windows:
+На Windows:
 venv\Scripts\activate
-# На Linux/Mac:
+На Linux/Mac:
 source venv/bin/activate
 
 Установите необходимые зависимости:
