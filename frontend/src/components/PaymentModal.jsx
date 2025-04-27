@@ -74,7 +74,7 @@ const PaymentModal = ({ booking, onClose }) => {
           <p>Адрес: {booking.sport_hall.address}</p>
           <p>Дата: {formatDate(booking.date)}</p>
           <p>Время: {booking.start_time} - {booking.end_time}</p>
-          <p>Сумма к оплате: {calculateAmount(booking)} ₽</p>
+          <p>Сумма к оплате: {calculateAmount(booking)} ₸</p>
         </div>
         
         <div className="qr-code-container">

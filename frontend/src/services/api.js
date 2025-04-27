@@ -183,3 +183,14 @@ export const createPayment = async (paymentData) => {
     throw error.response?.data || { detail: 'Ошибка при создании платежа' };
   }
 };
+
+export const updateUserProfile = async (userData) => {
+  try {
+    // Здесь мы должны отправить PATCH запрос на эндпоинт редактирования профиля
+    const response = await api.patch('/users/me/', userData);
+    return response.data;
+  } catch (error) {
+    console.error('Ошибка при обновлении профиля:', error);
+    throw error.response?.data || { detail: 'Ошибка при обновлении профиля' };
+  }
+};

@@ -74,12 +74,21 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  // Новая функция для обновления данных пользователя в контексте
+  const updateUserContext = (updatedUserData) => {
+    setUser(prevUser => ({
+      ...prevUser,
+      ...updatedUserData
+    }));
+  };
+
   const value = {
     user,
     loading,
     login,
     register,
     logout,
+    updateUserContext, // Добавляем новую функцию в контекст
     isAuthenticated: !!user,
   };
 

@@ -21,7 +21,7 @@ const Header = () => {
     <header className="header">
       <div className="container header-container">
         <Link to="/" className="logo">
-          <span className="logo-text">Sport<span className="logo-accent">Booking</span></span>
+          <span className="logo-text">Sport<span className="logo-accent">Hub</span></span>
         </Link>
 
         <button className="mobile-menu-button" onClick={toggleMobileMenu}>

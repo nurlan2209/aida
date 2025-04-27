@@ -1,62 +1,141 @@
+/* src/styles/HallCard.css */
 .hall-card {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-  
-  .hall-card-image {
-    height: 200px;
-    overflow: hidden;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-  }
-  
-  .hall-card-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-  }
-  
-  .hall-card:hover .hall-card-image img {
-    transform: scale(1.05);
-  }
-  
-  .hall-card-placeholder {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    background-color: #f5f5f5;
-    color: #999;
-    font-size: 0.9rem;
-  }
-  
-  .hall-card-content {
-    flex: 1;
-    padding: 1.25rem;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .hall-card-title {
-    font-size: 1.3rem;
-    margin-bottom: 0.5rem;
-    color: var(--accent-color);
-  }
-  
-  .hall-card-address {
-    font-size: 0.9rem;
-    color: #666;
-    margin-bottom: 0.75rem;
-  }
-  
-  .hall-card-price {
-    font-weight: 600;
-    color: var(--primary-color);
-    margin-bottom: 1rem;
-  }
-  
-  .hall-card-button {
-    margin-top: auto;
-  }
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.hall-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.hall-card-image-container {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+}
+
+.hall-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.hall-card:hover .hall-card-image {
+  transform: scale(1.08);
+}
+
+.hall-card-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%);
+  color: var(--primary-color);
+}
+
+.hall-icon {
+  font-size: 3rem;
+}
+
+.hall-card-price-tag {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: linear-gradient(90deg, var(--primary-color), #6384ff);
+  color: white;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.hall-card-content {
+  flex: 1;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.hall-card-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--accent-color);
+  position: relative;
+  padding-bottom: 0.75rem;
+}
+
+.hall-card-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+  border-radius: 2px;
+}
+
+.hall-card-address,
+.hall-card-capacity {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.address-icon,
+.capacity-icon {
+  margin-right: 0.5rem;
+  font-size: 1rem;
+}
+
+.address-text {
+  color: var(--text-color);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.capacity-text {
+  color: var(--text-color);
+}
+
+.hall-card-description {
+  font-size: 0.9rem;
+  color: #64748b;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+}
+
+.hall-card-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(90deg, var(--primary-color), #6384ff);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  align-self: flex-start;
+}
+
+.hall-card-button:hover {
+  background: linear-gradient(90deg, #3d5dea, #5575ff);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}

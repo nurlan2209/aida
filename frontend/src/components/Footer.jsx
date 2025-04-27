@@ -6,49 +6,49 @@ const Footer = () => {
 
   return (
     <footer className="footer">
-      <div className="container footer-container">
+      <div className="footer-content">
         <div className="footer-info">
           <Link to="/" className="footer-logo">
-            <span className="logo-text">Sport<span className="logo-accent">Booking</span></span>
+            <div className="footer-logo-icon">SH</div>
+            <span className="footer-logo-text">Sport<span className="footer-logo-accent">Hub</span></span>
           </Link>
           <p className="footer-description">
-            Система онлайн-бронирования спортивных залов для ваших тренировок и мероприятий
+            Удобная платформа для онлайн-бронирования спортивных залов. Тренируйтесь в любое удобное время!
           </p>
         </div>
-
-        <div className="footer-links">
+        
+        <div className="footer-links-container">
           <div className="footer-links-column">
-            <h4 className="footer-links-title">Навигация</h4>
-            <ul className="footer-link-list">
+            <h4 className="footer-heading">Разделы</h4>
+            <ul className="footer-links">
               <li><Link to="/" className="footer-link">Главная</Link></li>
-              <li><Link to="/halls" className="footer-link">Залы</Link></li>
-              <li><Link to="/profile" className="footer-link">Личный кабинет</Link></li>
+              <li><Link to="/halls" className="footer-link">Спортзалы</Link></li>
+              <li><Link to="/profile" className="footer-link">Профиль</Link></li>
             </ul>
           </div>
 
           <div className="footer-links-column">
-            <h4 className="footer-links-title">Информация</h4>
-            <ul className="footer-link-list">
-              <li><Link to="/about" className="footer-link">О нас</Link></li>
-              <li><Link to="/terms" className="footer-link">Правила</Link></li>
-              <li><Link to="/privacy" className="footer-link">Конфиденциальность</Link></li>
-            </ul>
-          </div>
-
-          <div className="footer-links-column">
-            <h4 className="footer-links-title">Контакты</h4>
-            <ul className="footer-link-list contact-list">
-              <li className="contact-item">Телефон: +7 (999) 123-45-67</li>
-              <li className="contact-item">E-mail: info@sportbooking.ru</li>
-              <li className="contact-item">Адрес: г. Москва, ул. Спортивная, 1</li>
+            <h4 className="footer-heading">Контакты</h4>
+            <ul className="footer-contact-list">
+              <li className="footer-contact-item">
+                <span className="contact-icon">📞</span>
+                <span>+7 (777) 425-95-77</span>
+              </li>
+              <li className="footer-contact-item">
+                <span className="contact-icon">📧</span>
+                <span>info@sporthub.ru</span>
+              </li>
+              <li className="footer-contact-item">
+                <span className="contact-icon">📍</span>
+                <span>г. Астана, ул. Мангилик Ел, 1</span>
+              </li>
             </ul>
           </div>
         </div>
       </div>
+      
       <div className="footer-bottom">
-        <div className="container">
-          <p className="copyright">© {currentYear} SportBooking. Все права защищены.</p>
-        </div>
+        <p className="copyright">© {currentYear} SportHub. Все права защищены</p>
       </div>
     </footer>
   );

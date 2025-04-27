@@ -11,6 +11,7 @@ const HallDetailPage = () => {
   const [hall, setHall] = useState(null);
   const [services, setServices] = useState([]);
   const [schedule, setSchedule] = useState([]);
+  const [activeTab, setActiveTab] = useState('info');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -57,15 +58,15 @@ const HallDetailPage = () => {
 
   if (loading) {
     return (
-      <div className="container">
-        <div className="loading">Загрузка...</div>
+      <div className="loading-container">
+        <div className="loading"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="container">
+      <div className="error-container">
         <div className="error-message">{error}</div>
       </div>
     );
@@ -73,7 +74,7 @@ const HallDetailPage = () => {
 
   if (!hall) {
     return (
-      <div className="container">
+      <div className="error-container">
         <div className="error-message">Зал не найден</div>
       </div>
     );
@@ -81,91 +82,185 @@ const HallDetailPage = () => {
 
   return (
     <div className="hall-detail-page">
-      <div className="container">
-        <div className="hall-detail-header">
-          <h1 className="hall-detail-title">{hall.name}</h1>
+      <div className="detail-header">
+        <div className="hall-detail-name">
+          <h1 className="page-title">{hall.name}</h1>
+          <div className="hall-address">
+            <span className="address-icon">📍</span>
+            <span>{hall.address}</span>
+          </div>
+        </div>
+        
+        <div className="hall-actions">
           
           {isAuthenticated ? (
-            <Link to={`/booking/${hall.id}`} className="button booking-button">
+            <Link to={`/booking/${hall.id}`} className="booking-button button">
               Забронировать
             </Link>
           ) : (
-            <Link to="/login" className="button booking-button">
+            <Link to="/login" className="booking-button button">
               Войдите для бронирования
             </Link>
           )}
         </div>
-        
-        <div className="hall-detail-content">
-          <div className="hall-detail-main">
-            <div className="hall-detail-image-container">
-              {hall.image ? (
-                <img 
-                  src={hall.image} 
-                  alt={hall.name} 
-                  className="hall-detail-image" 
-                />
-              ) : (
-                <div className="hall-detail-placeholder">Нет изображения</div>
-              )}
+      </div>
+      
+      <div className="hall-detail-content">
+        <div className="hall-image-container">
+          {hall.image ? (
+            <img 
+              src={hall.image} 
+              alt={hall.name} 
+              className="hall-image" 
+            />
+          ) : (
+            <div className="hall-image-placeholder">
+              <span className="hall-icon">🏟️</span>
             </div>
-            
-            <div className="hall-detail-info">
+          )}
+          
+          <div className="hall-price-badge">
+            <div className="price-value">{hall.price_per_hour} ₸</div>
+            <div className="price-label">в час</div>
+          </div>
+        </div>
+        
+        <div className="hall-tabs">
+          <button 
+            className={`hall-tab ${activeTab === 'info' ? 'active' : ''}`}
+            onClick={() => setActiveTab('info')}
+          >
+            <span className="tab-icon">ℹ️</span>
+            <span>Информация</span>
+          </button>
+          
+          <button 
+            className={`hall-tab ${activeTab === 'services' ? 'active' : ''}`}
+            onClick={() => setActiveTab('services')}
+          >
+            <span className="tab-icon">🛠️</span>
+            <span>Услуги</span>
+          </button>
+          
+          <button 
+            className={`hall-tab ${activeTab === 'schedule' ? 'active' : ''}`}
+            onClick={() => setActiveTab('schedule')}
+          >
+            <span className="tab-icon">📅</span>
+            <span>Расписание</span>
+          </button>
+        </div>
+        
+        <div className="tab-content">
+          {activeTab === 'info' && (
+            <div className="info-tab">
               <div className="info-section">
-                <h2 className="info-title">Информация о зале</h2>
-                <p className="hall-address">
-                  <span className="info-label">Адрес:</span> {hall.address}
-                </p>
-                <p className="hall-capacity">
-                  <span className="info-label">Вместимость:</span> {hall.capacity} человек
-                </p>
-                <p className="hall-price">
-                  <span className="info-label">Стоимость:</span> {hall.price_per_hour} ₽/час
-                </p>
+                <h2 className="section-subtitle">О зале</h2>
+                <div className="hall-description">
+                  {hall.description}
+                </div>
               </div>
               
               <div className="info-section">
-                <h2 className="info-title">Описание</h2>
-                <p className="hall-description">{hall.description}</p>
+                <h2 className="section-subtitle">Характеристики</h2>
+                <div className="features-grid">
+                  <div className="feature-item">
+                    <div className="feature-icon">👥</div>
+                    <div className="feature-details">
+                      <div className="feature-value">{hall.capacity}</div>
+                      <div className="feature-label">Вместимость</div>
+                    </div>
+                  </div>
+                  
+                  <div className="feature-item">
+                    <div className="feature-icon">💰</div>
+                    <div className="feature-details">
+                      <div className="feature-value">{hall.price_per_hour} ₸</div>
+                      <div className="feature-label">Цена в час</div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          )}
           
-          <div className="hall-detail-sidebar">
-            {services.length > 0 && (
-              <div className="services-section sidebar-section">
-                <h2 className="sidebar-title">Дополнительные услуги</h2>
-                <ul className="services-list">
+          {activeTab === 'services' && (
+            <div className="services-tab">
+              {services.length > 0 ? (
+                <div className="services-list">
                   {services.map((service) => (
-                    <li key={service.id} className="service-item">
+                    <div key={service.id} className="service-card">
                       <div className="service-header">
                         <h3 className="service-name">{service.name}</h3>
-                        <span className="service-price">{service.price} ₽</span>
+                        <div className="service-price">{service.price} ₸</div>
                       </div>
-                      <p className="service-description">{service.description}</p>
-                      <p className="service-duration">
-                        <span className="info-label">Длительность:</span> {service.duration} мин.
-                      </p>
-                    </li>
+                      <div className="service-description">{service.description}</div>
+                      <div className="service-details">
+                        <div className="service-detail-item">
+                          <span className="detail-icon">⏱️</span>
+                          <span className="detail-text">Длительность: {service.duration} мин.</span>
+                        </div>
+                      </div>
+                    </div>
                   ))}
-                </ul>
-              </div>
-            )}
-            
-            {schedule.length > 0 && (
-              <div className="schedule-section sidebar-section">
-                <h2 className="sidebar-title">Расписание работы</h2>
-                <ul className="schedule-list">
+                </div>
+              ) : (
+                <div className="empty-services">
+                  <div className="empty-icon">🔍</div>
+                  <h3>Нет доступных услуг</h3>
+                  <p>Для этого зала не предусмотрены дополнительные услуги</p>
+                </div>
+              )}
+            </div>
+          )}
+          
+          {activeTab === 'schedule' && (
+            <div className="schedule-tab">
+              {schedule.length > 0 ? (
+                <div className="schedule-table">
+                  <div className="schedule-header">
+                    <div className="day-column">День недели</div>
+                    <div className="time-column">Время работы</div>
+                  </div>
                   {schedule.map((item) => (
-                    <li key={item.id} className="schedule-item">
-                      <span className="schedule-day">{getDayName(item.day_of_week)}</span>
-                      <span className="schedule-time">
-                        {item.start_time.slice(0, 5)} - {item.end_time.slice(0, 5)}
-                      </span>
-                    </li>
+                    <div key={item.id} className="schedule-row">
+                      <div className="day-column">
+                        <span className="day-icon">📆</span>
+                        <span>{getDayName(item.day_of_week)}</span>
+                      </div>
+                      <div className="time-column">
+                        <span className="time-range">
+                          {item.start_time.slice(0, 5)} - {item.end_time.slice(0, 5)}
+                        </span>
+                      </div>
+                    </div>
                   ))}
-                </ul>
-              </div>
+                </div>
+              ) : (
+                <div className="empty-schedule">
+                  <div className="empty-icon">🕒</div>
+                  <h3>Нет информации о расписании</h3>
+                  <p>Расписание работы для этого зала не указано</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+        
+        <div className="booking-cta">
+          <div className="cta-container">
+            <div className="cta-content">
+              <h3 className="cta-title">Готовы забронировать?</h3>
+              <p className="cta-description">Выберите удобную дату и время для тренировки</p>
+            </div>
+            {isAuthenticated ? (
+              <Link to={`/booking/${hall.id}`} className="button cta-button">
+                Забронировать сейчас
+              </Link>
+            ) : (
+              <Link to="/login" className="button cta-button">
+                Войдите для бронирования
+              </Link>
             )}
           </div>
         </div>

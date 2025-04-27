@@ -201,7 +201,7 @@ const BookingForm = ({ hallId }) => {
               <option value="">Без дополнительных услуг</option>
               {services.map((service) => (
                 <option key={service.id} value={service.id}>
-                  {service.name} - {service.price} ₽
+                  {service.name} - {service.price} ₸
                 </option>
               ))}
             </select>
@@ -211,7 +211,7 @@ const BookingForm = ({ hallId }) => {
         <div className="booking-summary">
           <h3 className="booking-summary-title">Итого:</h3>
           <p className="booking-summary-price">
-            Стоимость аренды: {hall.price_per_hour} ₽/час
+            Стоимость аренды: {hall.price_per_hour} ₸/час
           </p>
         </div>
         

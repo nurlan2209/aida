@@ -70,59 +70,102 @@ const BookingsList = ({ bookings = [], onCancelBooking, onPaymentComplete }) => 
   });
 
   if (bookingsArray.length === 0) {
-    return <p className="no-bookings">У вас пока нет бронирований</p>;
+    return (
+      <div className="no-bookings">
+        <div className="no-bookings-icon">🔍</div>
+        <h3 className="no-bookings-title">У вас пока нет бронирований</h3>
+        <p className="no-bookings-text">Найдите и забронируйте спортивный зал, чтобы он появился здесь</p>
+      </div>
+    );
   }
 
   return (
     <div className="bookings-list">
       {sortedBookings.map((booking) => (
-        <div key={booking.id} className="booking-item card">
+        <div key={booking.id} className="booking-card">
           <div 
             className="booking-header"
             onClick={() => toggleBookingDetails(booking.id)}
           >
-            <div className="booking-main-info">
-              <h3 className="booking-title">{booking.sport_hall.name}</h3>
-              <p className="booking-date">{formatDate(booking.date)}</p>
-              <p className="booking-time">
-                {booking.start_time.slice(0, 5)} - {booking.end_time.slice(0, 5)}
-              </p>
+            <div className="booking-hall-info">
+              <div className="booking-hall-icon">🏟️</div>
+              <div className="booking-hall-details">
+                <h3 className="booking-hall-name">{booking.sport_hall.name}</h3>
+                <p className="booking-address">{booking.sport_hall.address}</p>
+              </div>
             </div>
-            <div className="booking-status-container">
-              <span className={`booking-status ${getStatusClass(booking.status)}`}>
-                {getStatusLabel(booking.status)}
-              </span>
-              <span className="booking-toggle">
-                {expandedBooking === booking.id ? '▲' : '▼'}
-              </span>
+            
+            <div className="booking-meta">
+              <div className="booking-date-time">
+                <div className="booking-date">{formatDate(booking.date)}</div>
+                <div className="booking-time">
+                  {booking.start_time.slice(0, 5)} - {booking.end_time.slice(0, 5)}
+                </div>
+              </div>
+              
+              <div className="booking-status-container">
+                <span className={`booking-status ${getStatusClass(booking.status)}`}>
+                  {getStatusLabel(booking.status)}
+                </span>
+                <span className="booking-toggle">
+                  {expandedBooking === booking.id ? '▲' : '▼'}
+                </span>
+              </div>
             </div>
           </div>
           
           {expandedBooking === booking.id && (
             <div className="booking-details">
-              <div className="booking-details-row">
-                <span className="booking-detail-label">Зал:</span>
-                <span className="booking-detail-value">{booking.sport_hall.name}</span>
-              </div>
-
-              <div className="booking-details-row">
-                <span className="booking-detail-label">Адрес:</span>
-                <span className="booking-detail-value">{booking.sport_hall.address}</span>
+              <div className="booking-details-grid">
+                <div className="details-section">
+                  <h4 className="details-title">Информация о бронировании</h4>
+                  <div className="detail-row">
+                    <span className="detail-label">Номер:</span>
+                    <span className="detail-value">#{booking.id}</span>
+                  </div>
+                  <div className="detail-row">
+                    <span className="detail-label">Дата:</span>
+                    <span className="detail-value">{formatDate(booking.date)}</span>
+                  </div>
+                  <div className="detail-row">
+                    <span className="detail-label">Время:</span>
+                    <span className="detail-value">{booking.start_time.slice(0, 5)} - {booking.end_time.slice(0, 5)}</span>
+                  </div>
+                  <div className="detail-row">
+                    <span className="detail-label">Статус:</span>
+                    <span className={`detail-value status-text ${getStatusClass(booking.status)}`}>
+                      {getStatusLabel(booking.status)}
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="details-section">
+                  <h4 className="details-title">Спортивный зал</h4>
+                  <div className="detail-row">
+                    <span className="detail-label">Название:</span>
+                    <span className="detail-value">{booking.sport_hall.name}</span>
+                  </div>
+                  <div className="detail-row">
+                    <span className="detail-label">Адрес:</span>
+                    <span className="detail-value">{booking.sport_hall.address}</span>
+                  </div>
+                  <div className="detail-row">
+                    <span className="detail-label">Вместимость:</span>
+                    <span className="detail-value">{booking.sport_hall.capacity} чел.</span>
+                  </div>
+                </div>
               </div>
               
               {booking.service && (
-                <div className="booking-details-row">
-                  <span className="booking-detail-label">Услуга:</span>
-                  <span className="booking-detail-value">{booking.service.name}</span>
+                <div className="service-section">
+                  <h4 className="details-title">Дополнительные услуги</h4>
+                  <div className="service-item">
+                    <div className="service-name">{booking.service.name}</div>
+                    <div className="service-price">{booking.service.price} ₸</div>
+                  </div>
+                  <div className="service-description">{booking.service.description}</div>
                 </div>
               )}
-              
-              <div className="booking-details-row">
-                <span className="booking-detail-label">Статус оплаты:</span>
-                <span className="booking-detail-value">
-                  {booking.status === 'confirmed' ? 'Оплачено' : 'Не оплачено'}
-                </span>
-              </div>
               
               <div className="booking-actions">
                 {booking.status !== 'cancelled' && booking.status !== 'completed' && (
@@ -145,7 +188,7 @@ const BookingsList = ({ bookings = [], onCancelBooking, onPaymentComplete }) => 
                       handlePaymentClick(booking);
                     }}
                   >
-                    Оплатить
+                    Оплатить сейчас
                   </button>
                 )}
               </div>
