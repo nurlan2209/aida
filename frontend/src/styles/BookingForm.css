@@ -1,0 +1,57 @@
+.booking-form-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .booking-form-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--accent-color);
+  }
+  
+  .booking-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  
+  .date-picker {
+    width: 100%;
+  }
+  
+  .booking-summary {
+    background-color: #f9f9f9;
+    padding: 1.25rem;
+    border-radius: 4px;
+    margin-top: 1rem;
+  }
+  .booking-summary-title {
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+    color: var(--accent-color);
+  }
+  
+  .booking-summary-price {
+    font-weight: 500;
+  }
+  
+  .booking-submit-button {
+    padding: 0.75rem;
+    margin-top: 1rem;
+  }
+  
+  @media (max-width: 768px) {
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+  }
