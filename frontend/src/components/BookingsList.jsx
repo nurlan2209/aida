@@ -120,7 +120,7 @@ const BookingsList = ({ bookings = [], onCancelBooking, onPaymentComplete }) => 
               <div className="booking-details-row">
                 <span className="booking-detail-label">Статус оплаты:</span>
                 <span className="booking-detail-value">
-                  {booking.payment ? 'Оплачено' : 'Не оплачено'}
+                  {booking.status === 'confirmed' ? 'Оплачено' : 'Не оплачено'}
                 </span>
               </div>
               
@@ -128,7 +128,10 @@ const BookingsList = ({ bookings = [], onCancelBooking, onPaymentComplete }) => 
                 {booking.status !== 'cancelled' && booking.status !== 'completed' && (
                   <button 
                     className="button button-outline cancel-button"
-                    onClick={() => onCancelBooking(booking.id)}
+                    onClick={(e) => {
+                      e.stopPropagation(); // Предотвращаем всплытие события
+                      onCancelBooking(booking.id);
+                    }}
                   >
                     Отменить бронирование
                   </button>
@@ -137,7 +140,10 @@ const BookingsList = ({ bookings = [], onCancelBooking, onPaymentComplete }) => 
                 {booking.status === 'pending' && (
                   <button 
                     className="button payment-button"
-                    onClick={() => handlePaymentClick(booking)}
+                    onClick={(e) => {
+                      e.stopPropagation(); // Предотвращаем всплытие события
+                      handlePaymentClick(booking);
+                    }}
                   >
                     Оплатить
                   </button>

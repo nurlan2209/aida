@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import '../styles/PaymentModal.css';
 
 const calculateAmount = (booking) => {
@@ -10,7 +9,7 @@ const calculateAmount = (booking) => {
     let amount = 0;
     
     // Стоимость зала за час
-    const hourlyRate = booking.sport_hall?.price_per_hour || 0;
+    const hourlyRate = booking.sport_hall.price_per_hour || 0;
     
     // Вычисляем количество часов
     if (booking.start_time && booking.end_time) {
@@ -35,7 +34,6 @@ const calculateAmount = (booking) => {
 
 const PaymentModal = ({ booking, onClose }) => {
   const [timeLeft, setTimeLeft] = useState(20);
-  const navigate = useNavigate();
 
   useEffect(() => {
     // Таймер обратного отсчета
@@ -57,6 +55,12 @@ const PaymentModal = ({ booking, onClose }) => {
     onClose(true); // true означает, что оплата успешна
   };
 
+  // Форматирование даты в читаемый формат
+  const formatDate = (dateString) => {
+    const options = { day: 'numeric', month: 'long', year: 'numeric' };
+    return new Date(dateString).toLocaleDateString('ru-RU', options);
+  };
+
   return (
     <div className="payment-modal-overlay">
       <div className="payment-modal">
@@ -65,11 +69,12 @@ const PaymentModal = ({ booking, onClose }) => {
         <h2 className="payment-modal-title">Оплата бронирования</h2>
         
         <div className="payment-info">
-        <p>Номер бронирования: {booking.id}</p>
-        <p>Зал: {booking.sport_hall?.name}</p>
-        <p>Дата: {new Date(booking.date).toLocaleDateString('ru-RU')}</p>
-        <p>Время: {booking.start_time} - {booking.end_time}</p>
-        <p>Сумма к оплате: {calculateAmount(booking)} ₽</p>
+          <p>Номер бронирования: {booking.id}</p>
+          <p>Зал: {booking.sport_hall.name}</p>
+          <p>Адрес: {booking.sport_hall.address}</p>
+          <p>Дата: {formatDate(booking.date)}</p>
+          <p>Время: {booking.start_time} - {booking.end_time}</p>
+          <p>Сумма к оплате: {calculateAmount(booking)} ₽</p>
         </div>
         
         <div className="qr-code-container">

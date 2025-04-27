@@ -21,6 +21,27 @@ api.interceptors.request.use(
   }
 );
 
+// Функция для обработки данных бронирования
+const processBookings = (bookings) => {
+  return bookings.map(booking => {
+    const result = {...booking};
+    
+    // Если есть sport_hall_details, но sport_hall это просто ID или объект без нужных полей
+    if (result.sport_hall_details) {
+      result.sport_hall = result.sport_hall_details;
+      delete result.sport_hall_details;
+    }
+    
+    // Обработка данных услуги
+    if (result.service_details) {
+      result.service = result.service_details;
+      delete result.service_details;
+    }
+    
+    return result;
+  });
+};
+
 // Функции для работы с API
 export const login = async (email, password) => {
   try {
@@ -92,21 +113,25 @@ export const getScheduleByHall = async (hallId) => {
 export const getUserBookings = async () => {
   try {
     const response = await api.get('/bookings/bookings/');
-    // Проверяем формат ответа
-    console.log('API ответ:', response.data);
+    console.log('API ответ с бронированиями:', response.data);
     
-    // Если ответ - это объект с полем 'results', возвращаем results
+    let bookingsData;
+    
+    // Если ответ - это объект с полем 'results', берем results
     if (response.data && Array.isArray(response.data.results)) {
-      return response.data.results;
+      bookingsData = response.data.results;
     }
-    
-    // Если ответ сам является массивом, возвращаем его
-    if (Array.isArray(response.data)) {
-      return response.data;
+    // Если ответ сам является массивом, используем его
+    else if (Array.isArray(response.data)) {
+      bookingsData = response.data;
     }
-    
     // В крайнем случае возвращаем пустой массив
-    return [];
+    else {
+      bookingsData = [];
+    }
+    
+    // Обрабатываем данные, чтобы sport_hall и service содержали полную информацию
+    return processBookings(bookingsData);
   } catch (error) {
     console.error('Ошибка при получении бронирований:', error);
     throw error.response?.data || { detail: 'Ошибка при получении бронирований' };
@@ -116,6 +141,12 @@ export const getUserBookings = async () => {
 export const createBooking = async (bookingData) => {
   try {
     const response = await api.post('/bookings/bookings/', bookingData);
+    
+    // Обрабатываем полученные данные перед возвратом
+    if (response.data) {
+      return processBookings([response.data])[0];
+    }
+    
     return response.data;
   } catch (error) {
     console.error('Полная ошибка при создании бронирования:', error);
@@ -130,6 +161,12 @@ export const createBooking = async (bookingData) => {
 export const cancelBooking = async (id) => {
   try {
     const response = await api.post(`/bookings/bookings/${id}/cancel/`);
+    
+    // Обрабатываем данные перед возвратом
+    if (response.data) {
+      return processBookings([response.data])[0];
+    }
+    
     return response.data;
   } catch (error) {
     console.error('Ошибка при отмене бронирования:', error);
